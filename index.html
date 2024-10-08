@@ -158,8 +158,8 @@ button:not(.play):active {
             <div class="game-before">
                 <h3>BEFORE <button id="before-random" class="play" onclick="play('before')"><i class="fas fa-play"></i></button></h3>
                 <div style="display: flex; margin: 20px 0;" id="before-wrp" class="hidden">
-                    <img id="compare-result" alt="Image" width="50" class="hidden">
-                    <input type="text" id="before-input" />
+                    <img id="before-result" alt="Image" width="50" class="hidden">
+                    <input type="number" id="before-input" />
                     <h5 id="before-num"></h5>
                 </div>
                 <button onclick="checkResult('before')">Result</button>
@@ -167,15 +167,15 @@ button:not(.play):active {
             <div class="game-right">
                 <h3>AFTER <button id="after-random" class="play" onclick="play('after')"><i class="fas fa-play"></i></button></h3>
                 <div style="display: flex; margin: 20px 0;" id="after-wrp" class="hidden">
-                    <img id="compare-result" alt="Image" width="50" class="hidden">
+                    <img id="after-result" alt="Image" width="50" class="hidden">
                     <h5 id="after-num"></h5>
-                    <input type="text" id="after-input" />
+                    <input type="number" id="after-input" />
                 </div>
                 <button onclick="checkResult('after')">Result</button>
             </div>
         </div>
         <div class="game-center">
-            <h3>GREATER/LESSER/EQUAL (>=) <button id="after-random" class="play" onclick="play('compare')"><i class="fas fa-play"></i></button></h3>
+            <h3>GREATER/LESSER/EQUAL (>=) <button id="compare-random" class="play" onclick="play('compare')"><i class="fas fa-play"></i></button></h3>
             <div style="display: flex; margin: 20px 0;" id="compare-wrp" class="hidden">
                 <img id="compare-result" alt="Image" width="50" class="hidden">
                 <h5 id="compare-num"></h5>
@@ -209,7 +209,9 @@ button:not(.play):active {
             const resultDisplay = document.getElementById(`${type}-result`);
             resultDisplay.classList.remove('hidden');
             const randomNumber = parseInt(document.getElementById(`${type}-num`).textContent);
-            const randomNumber2 = parseInt(document.getElementById(`${type}-num-2`).textContent);
+            if (type === 'compare') {
+                const randomNumber2 = parseInt(document.getElementById(`${type}-num-2`).textContent);
+            }
             const selectedValue = document.getElementById('compare-input').value;
             if (type === 'before') {
                 if (userInput === (randomNumber - 1)) {
