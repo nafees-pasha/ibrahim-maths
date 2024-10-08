@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
-    <title>Document</title>
+    <title>Muhammad Ibrahim</title>
 </head>
 <style>
     body {
@@ -15,9 +15,9 @@
     }
     .wrapper {
         background-color: white;
-        box-shadow: rgba(89, 89, 89, 1.0) 0px 0px 8px -1;
+        box-shadow: rgba(89, 89, 89, 1.0) 0px 0px 8px;
         width: 80%;
-        margin: 5% auto;
+        margin: 100px auto;
     }
     h2.frmTitle {
         font-family: Courgette;
@@ -100,19 +100,21 @@ button:not(.play):active {
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
 }
 .game-center {
-    margin: 50px auto;
-    padding-bottom: 50px;
+    padding: 50px 0;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    background-color: #f7f7f7;
 }
 .hidden {
-    display: none!important;
+    visibility: hidden;
 }
 .play {
     background: aqua;
     cursor: pointer;
+    position: relative;
+    top: -5px;
 }
 .styled-select {
             padding: 10px;
@@ -151,12 +153,12 @@ button:not(.play):active {
         <div style="display: flex; justify-content: center;">
             <img src="ibbu.jpg" class="dp" />
         </div>
-            <h2 class="frmTitle"><em>Muhammad Ibrahim Game!</em></h2>
+            <h2 class="frmTitle"><em>Muhammad Ibrahim's Game</em></h2>
         <div class="game-container">
             <div class="game-before">
                 <h3>BEFORE <button id="before-random" class="play" onclick="play('before')"><i class="fas fa-play"></i></button></h3>
                 <div style="display: flex; margin: 20px 0;" id="before-wrp" class="hidden">
-                    <img id="before-result" alt="Image" width="50" class="hidden">
+                    <img id="compare-result" alt="Image" width="50" class="hidden">
                     <input type="text" id="before-input" />
                     <h5 id="before-num"></h5>
                 </div>
@@ -165,7 +167,7 @@ button:not(.play):active {
             <div class="game-right">
                 <h3>AFTER <button id="after-random" class="play" onclick="play('after')"><i class="fas fa-play"></i></button></h3>
                 <div style="display: flex; margin: 20px 0;" id="after-wrp" class="hidden">
-                    <img id="after-result" alt="Image" width="50" class="hidden">
+                    <img id="compare-result" alt="Image" width="50" class="hidden">
                     <h5 id="after-num"></h5>
                     <input type="text" id="after-input" />
                 </div>
@@ -194,7 +196,9 @@ button:not(.play):active {
             const randomNumber = Math.floor(Math.random() * 100) + 1;
             const randomNumber2 = Math.floor(Math.random() * 100) + 1; // Generates a number between 1 and 100
             document.getElementById(`${type}-num`).textContent = randomNumber;
-            document.getElementById(`${type}-num-2`).textContent = randomNumber2;
+            if (type === 'compare') {
+                document.getElementById(`${type}-num-2`).textContent = randomNumber2;
+            }
             const resultDisplay = document.getElementById(`${type}-result`);
             resultDisplay.classList.add('hidden');
             document.getElementById(`${type}-input`).value = '';
