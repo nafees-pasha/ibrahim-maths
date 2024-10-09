@@ -231,8 +231,8 @@ button:not(.play, .tab-button):disabled {
             <img src="ibbu.jpg" class="dp" />
             <div class="dp">
                 <div style="margin: 0 auto; text-align: center;">
-                    <p id="right-ans">0</p>
-                    -- <span id="wrong-ans">0</span>
+                    <p id="right-ans"></p>
+                    -- <span id="wrong-ans"></span>
                 </div>
                 <p id="out-of">5</p>
             </div>
@@ -313,6 +313,10 @@ button:not(.play, .tab-button):disabled {
             document.getElementById(`${type}-input`).value = '';
             document.getElementById(`${type}-btn`).disabled = false;
         }
+
+        window.addEventListener('load', function() {
+            play('before')
+        });
         
         function checkResult(type) {
             const userInput = parseInt(document.getElementById(`${type}-input`).value);
@@ -369,16 +373,20 @@ button:not(.play, .tab-button):disabled {
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
                         <i class="fas fa-star"></i>
-                    </div>`
+                    </div>`;
                 } else {
                     document.getElementById('excellent').classList.remove('d-none');
                     document.getElementById('excellent').innerHTML = `
-                    <em>Very Bad! Try Again</em>`
+                    <em>Very Bad! Try Again</em>`;
                 }
                 rightMarks = 0;
                 wrongMarks = 0;
                 document.getElementById(`${type}-random`).classList.add('d-none');
-            } 
+            } else {
+                setTimeout(() => {
+                    play(type);
+                }, 1000);
+            }
         };
 
         function openTab(evt, tabName) {
@@ -408,6 +416,7 @@ button:not(.play, .tab-button):disabled {
             document.getElementById(`${tabName}-btn`).disabled = false;
             document.getElementById(`${tabName}-wrp`).classList.add('hidden');
             document.getElementById(`${tabName}-random`).classList.remove('d-none');
+            play(tabName);
         }
     </script>
 </body>
