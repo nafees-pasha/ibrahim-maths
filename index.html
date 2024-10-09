@@ -248,7 +248,7 @@ button:not(.play, .tab-button):disabled {
             <button class="tab-button" onclick="openTab(event, 'between')">BETWEEN</button>
         </div>
         <div id="before" class="tab-content active game-center"> 
-            <h3>BEFORE <button id="before-random" class="play" onclick="play('before')"><i class="fas fa-play"></i></button></h3>
+            <h3>BEFORE</h3>
             <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="before-wrp" class="hidden">
                 <img id="before-result" alt="Image" width="50" class="hidden">
                 <input type="number" id="before-input" />
@@ -257,7 +257,7 @@ button:not(.play, .tab-button):disabled {
             <button id="before-btn" disabled onclick="checkResult('before')">Result</button>
         </div>
         <div id="after" class="tab-content game-center">
-            <h3>AFTER <button id="after-random" class="play" onclick="play('after')"><i class="fas fa-play"></i></button></h3>
+            <h3>AFTER</h3>
             <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="after-wrp" class="hidden">
                 <img id="after-result" alt="Image" width="50" class="hidden">
                 <h5 id="after-num"></h5>
@@ -266,7 +266,7 @@ button:not(.play, .tab-button):disabled {
             <button id="after-btn" disabled onclick="checkResult('after')">Result</button>
         </div>
         <div id="compare" class="tab-content game-center">
-            <h3>GREATER/LESSER/EQUAL (>=&#60;) <button id="compare-random" class="play" onclick="play('compare')"><i class="fas fa-play"></i></button></h3>
+            <h3>GREATER/LESSER/EQUAL (>=&#60;)</h3>
             <div style="display: flex; margin: 20px 0; justify-content: center;" id="compare-wrp" class="hidden">
                 <img id="compare-result" alt="Image" width="50" class="hidden">
                 <h5 id="compare-num"></h5>
@@ -281,7 +281,7 @@ button:not(.play, .tab-button):disabled {
         </div>
 
         <div id="between" class="tab-content game-center">
-            <h3>BETWEEN <button id="between-random" class="play" onclick="play('between')"><i class="fas fa-play"></i></button></h3>
+            <h3>BETWEEN</h3>
             <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="between-wrp" class="hidden">
                 <img id="between-result" alt="Image" width="50" class="hidden">
                 <h5 id="between-num"></h5>
@@ -379,13 +379,16 @@ button:not(.play, .tab-button):disabled {
                     document.getElementById('excellent').innerHTML = `
                     <em>Very Bad! Try Again</em>`;
                 }
-                rightMarks = 0;
-                wrongMarks = 0;
-                document.getElementById(`${type}-random`).classList.add('d-none');
+                rightMarks = '';
+                wrongMarks = '';
+                const resultDisplay = document.getElementById(`${type}-result`);
+                resultDisplay.classList.add('hidden');
+                document.getElementById(`${type}-input`).value = '';
+                document.getElementById(`${type}-btn`).disabled = true;
             } else {
                 setTimeout(() => {
                     play(type);
-                }, 1000);
+                }, 2000);
             }
         };
 
@@ -405,17 +408,16 @@ button:not(.play, .tab-button):disabled {
             // Show the current tab content
             document.getElementById(tabName).classList.add('active');
             evt.currentTarget.classList.add('active'); // Highlight the active tab button
-
             
-            document.getElementById('right-ans').textContent = 0;
-            document.getElementById('wrong-ans').textContent = 0;
+            document.getElementById('right-ans').textContent = '';
+            document.getElementById('wrong-ans').textContent = '';
             document.getElementById('excellent').classList.add('d-none');
             const resultDisplay = document.getElementById(`${tabName}-result`);
             resultDisplay.classList.add('hidden');
             document.getElementById(`${tabName}-input`).value = '';
             document.getElementById(`${tabName}-btn`).disabled = false;
             document.getElementById(`${tabName}-wrp`).classList.add('hidden');
-            document.getElementById(`${tabName}-random`).classList.remove('d-none');
+            // document.getElementById(`${tabName}-random`).classList.remove('d-none');
             play(tabName);
         }
     </script>
