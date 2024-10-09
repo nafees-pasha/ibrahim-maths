@@ -45,6 +45,25 @@
         margin: -40px auto 20px;
         border: 4px solid #fff;
         box-shadow: rgba(89, 89, 89, 6) 0px 0px 6px;
+        background-color: white;
+    }
+    .dp #out-of, .dp #right-ans, .dp #wrong-ans{
+        font-size: 34px;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px 0;
+        margin: 0;
+        display: inline-block;
+    }
+    .dp #right-ans {
+        color: green;
+    }
+    .dp #wrong-ans {
+        color: red;
+    }
+    .dp #out-of {
+        border-top: 1px solid #ccc;
+        display: block;
     }
     h3 {
         font-family: Courgette;
@@ -78,7 +97,7 @@
         margin: 0;
     }
     
-button:not(.play) {
+button:not(.play, .tab-button) {
     padding: 15px 30px;
     font-size: 16px;
     color: white;
@@ -90,14 +109,18 @@ button:not(.play) {
     transition: transform 0.2s, box-shadow 0.2s;
 }
 
-button:not(.play):hover {
+button:not(.play, .tab-button):hover {
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4);
 }
 
-button:not(.play):active {
+button:not(.play, .tab-button):active {
     transform: translateY(2px);
     box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+}
+button:not(.play, .tab-button):disabled {
+    opacity: .2;
+    cursor: none;
 }
 .game-center {
     padding: 50px 0;
@@ -106,6 +129,7 @@ button:not(.play):active {
     justify-content: center;
     align-items: center;
     background-color: #f7f7f7;
+    text-align: center;
 }
 .hidden {
     visibility: hidden;
@@ -115,9 +139,11 @@ button:not(.play):active {
     cursor: pointer;
     position: relative;
     top: -5px;
+    border-radius: 30px;
+    height: 30px;
 }
 .styled-select {
-            padding: 10px;
+            padding: 30px;
             font-size: 26px;
             border: 1px solid #ccc;
             border-radius: 5px;
@@ -135,48 +161,113 @@ button:not(.play):active {
             border-color: #007bff;
             outline: none;
         }
-        @media (max-width: 600px) {
-            .game-container {
-                flex-direction: column;
-                width: 100%;
-            }
-            .game-container > div {
-                width: 100%;
-            }
-            .wrapper {
-                width: 96%;
-            }
-        }
+        .tabs {
+    display: flex;
+    border-bottom: 1px solid #ccc;
+}
+
+.tab-button {
+    background: none;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.tab-button:hover {
+    background: #f1f1f1;
+}
+
+.tab-button.active {
+    border-bottom: 2px solid blue;
+    font-weight: bold;
+}
+
+.tab-content {
+    display: none;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.blink {
+    font-size: 24px;
+    color: hotpink; /* Red color */
+    animation: blink-animation 2s steps(5, start) infinite;
+    text-align: center;
+}
+.d-none { 
+    display: none;
+}
+
+@keyframes blink-animation {
+    0%, 100% {
+        opacity: 1; /* Fully visible */
+    }
+    10% {
+        opacity: 0; /* Fully transparent */
+    }
+}
+
+@media (max-width: 600px) {
+    .game-container {
+        flex-direction: column;
+        width: 100%;
+    }
+    .game-container > div {
+        width: 100%;
+    }
+    .wrapper {
+        width: 96%;
+    }
+}
 </style>
 <body>
     <div class="wrapper">
-        <div style="display: flex; justify-content: center;">
+        <div style="display: flex; justify-content: space-between;">
             <img src="ibbu.jpg" class="dp" />
-        </div>
-            <h2 class="frmTitle"><em>Muhammad Ibrahim's Game</em></h2>
-        <div class="game-container">
-            <div class="game-before">
-                <h3>BEFORE <button id="before-random" class="play" onclick="play('before')"><i class="fas fa-play"></i></button></h3>
-                <div style="display: flex; margin: 20px 0;" id="before-wrp" class="hidden">
-                    <img id="before-result" alt="Image" width="50" class="hidden">
-                    <input type="number" id="before-input" />
-                    <h5 id="before-num"></h5>
+            <div class="dp">
+                <div style="margin: 0 auto; text-align: center;">
+                    <p id="right-ans">0</p>
+                    -- <span id="wrong-ans">0</span>
                 </div>
-                <button onclick="checkResult('before')">Result</button>
-            </div>
-            <div class="game-right">
-                <h3>AFTER <button id="after-random" class="play" onclick="play('after')"><i class="fas fa-play"></i></button></h3>
-                <div style="display: flex; margin: 20px 0;" id="after-wrp" class="hidden">
-                    <img id="after-result" alt="Image" width="50" class="hidden">
-                    <h5 id="after-num"></h5>
-                    <input type="number" id="after-input" />
-                </div>
-                <button onclick="checkResult('after')">Result</button>
+                <p id="out-of">5</p>
             </div>
         </div>
-        <div class="game-center">
-            <h3>GREATER/LESSER/EQUAL (>=) <button id="compare-random" class="play" onclick="play('compare')"><i class="fas fa-play"></i></button></h3>
-            <div style="display: flex; margin: 20px 0;" id="compare-wrp" class="hidden">
+        <h2 class="blink d-none" id="excellent">
+            
+        </h2>
+        <h2 class="frmTitle"><em>Muhammad Ibrahim's Game</em></h2>
+        <div class="tabs">
+            <button class="tab-button active" onclick="openTab(event, 'before')">BEFORE</button>
+            <button class="tab-button" onclick="openTab(event, 'after')">AFTER</button>
+            <button class="tab-button" onclick="openTab(event, 'compare')">GREATER</button>
+            <button class="tab-button" onclick="openTab(event, 'between')">BETWEEN</button>
+        </div>
+        <div id="before" class="tab-content active game-center"> 
+            <h3>BEFORE <button id="before-random" class="play" onclick="play('before')"><i class="fas fa-play"></i></button></h3>
+            <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="before-wrp" class="hidden">
+                <img id="before-result" alt="Image" width="50" class="hidden">
+                <input type="number" id="before-input" />
+                <h5 id="before-num"></h5>
+            </div>
+            <button id="before-btn" disabled onclick="checkResult('before')">Result</button>
+        </div>
+        <div id="after" class="tab-content game-center">
+            <h3>AFTER <button id="after-random" class="play" onclick="play('after')"><i class="fas fa-play"></i></button></h3>
+            <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="after-wrp" class="hidden">
+                <img id="after-result" alt="Image" width="50" class="hidden">
+                <h5 id="after-num"></h5>
+                <input type="number" id="after-input" />
+            </div>
+            <button id="after-btn" disabled onclick="checkResult('after')">Result</button>
+        </div>
+        <div id="compare" class="tab-content game-center">
+            <h3>GREATER/LESSER/EQUAL (>=&#60;) <button id="compare-random" class="play" onclick="play('compare')"><i class="fas fa-play"></i></button></h3>
+            <div style="display: flex; margin: 20px 0; justify-content: center;" id="compare-wrp" class="hidden">
                 <img id="compare-result" alt="Image" width="50" class="hidden">
                 <h5 id="compare-num"></h5>
                 <select id="compare-input" class="styled-select">
@@ -186,22 +277,41 @@ button:not(.play):active {
                 </select>
                 <h5 id="compare-num-2"></h5>
             </div>
-            <button onclick="checkResult('compare')">Result</button>
+            <button id="compare-btn" disabled onclick="checkResult('compare')">Result</button>
+        </div>
+
+        <div id="between" class="tab-content game-center">
+            <h3>BETWEEN <button id="between-random" class="play" onclick="play('between')"><i class="fas fa-play"></i></button></h3>
+            <div style="display: flex; margin: 20px auto; max-width: fit-content;" id="between-wrp" class="hidden">
+                <img id="between-result" alt="Image" width="50" class="hidden">
+                <h5 id="between-num"></h5>
+                <input type="number" id="between-input" />
+                <h5 id="between-num-2"></h5>
+            </div>
+            <button id="between-btn" disabled onclick="checkResult('between')">Result</button>
         </div>
         
     </div>
     <script>
+        let wrongMarks = 0;
+        let rightMarks = 0;
+        let totalMarks = 2;
         function play(type) {
             document.getElementById(`${type}-wrp`).classList.remove('hidden');
             const randomNumber = Math.floor(Math.random() * 100) + 1;
             const randomNumber2 = Math.floor(Math.random() * 100) + 1; // Generates a number between 1 and 100
+            const betweenNumber2 = randomNumber + 2;
             document.getElementById(`${type}-num`).textContent = randomNumber;
             if (type === 'compare') {
                 document.getElementById(`${type}-num-2`).textContent = randomNumber2;
             }
+            if (type === 'between') {
+                document.getElementById(`${type}-num-2`).textContent = betweenNumber2;
+            }
             const resultDisplay = document.getElementById(`${type}-result`);
             resultDisplay.classList.add('hidden');
             document.getElementById(`${type}-input`).value = '';
+            document.getElementById(`${type}-btn`).disabled = false;
         }
         
         function checkResult(type) {
@@ -213,31 +323,92 @@ button:not(.play):active {
             if (type === 'before') {
                 if (userInput === (randomNumber - 1)) {
                     resultDisplay.src = 'right.gif';
+                    rightMarks += 1;
                 } else {
                     resultDisplay.src = 'wrong.gif';
+                    wrongMarks += 1;
                 }
             }
-            if (type === 'after') {
+            if (type === 'after' || type === 'between') {
                 if (userInput === (randomNumber + 1)) {
                     resultDisplay.src = 'right.gif';
+                    rightMarks += 1;
                 } else {
                     resultDisplay.src = 'wrong.gif';
+                    wrongMarks += 1;
                 }
             }
             if (type === 'compare') {
                 const randomNumber2 = parseInt(document.getElementById(`${type}-num-2`).textContent);
                 if (randomNumber > randomNumber2 && selectedValue == 2) {
                     resultDisplay.src = 'right.gif';
+                    rightMarks += 1;
                 } else if (randomNumber < randomNumber2 && selectedValue == 3) { 
                     resultDisplay.src = 'right.gif';
+                    rightMarks += 1;
                 } else if (randomNumber === randomNumber2 && selectedValue == 1) { 
                     resultDisplay.src = 'right.gif';
+                    rightMarks += 1;
                 }
                  else {
                     resultDisplay.src = 'wrong.gif';
+                    wrongMarks += 1;
                 }
             }
+            document.getElementById(`${type}-btn`).disabled = true;
+            document.getElementById('right-ans').textContent = rightMarks;
+            document.getElementById('wrong-ans').textContent = wrongMarks;
+            if(rightMarks + wrongMarks >= totalMarks) {
+                if (rightMarks >= totalMarks) {
+                    document.getElementById('excellent').classList.remove('d-none');
+                    document.getElementById('excellent').innerHTML = `
+                    <em>Excellent! very good Ibrahim </em>
+                    <div style="color: green;">
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                        <i class="fas fa-star"></i>
+                    </div>`
+                } else {
+                    document.getElementById('excellent').classList.remove('d-none');
+                    document.getElementById('excellent').innerHTML = `
+                    <em>Very Bad! Try Again</em>`
+                }
+                rightMarks = 0;
+                wrongMarks = 0;
+                document.getElementById(`${type}-random`).classList.add('d-none');
+            } 
         };
+
+        function openTab(evt, tabName) {
+            // Get all tab content elements
+            const tabContents = document.querySelectorAll('.tab-content');
+            tabContents.forEach(content => {
+                content.classList.remove('active'); // Hide all tab contents
+            });
+
+            // Get all tab buttons
+            const tabButtons = document.querySelectorAll('.tab-button');
+            tabButtons.forEach(button => {
+                button.classList.remove('active'); // Remove active class from all buttons
+            });
+
+            // Show the current tab content
+            document.getElementById(tabName).classList.add('active');
+            evt.currentTarget.classList.add('active'); // Highlight the active tab button
+
+            
+            document.getElementById('right-ans').textContent = 0;
+            document.getElementById('wrong-ans').textContent = 0;
+            document.getElementById('excellent').classList.add('d-none');
+            const resultDisplay = document.getElementById(`${tabName}-result`);
+            resultDisplay.classList.add('hidden');
+            document.getElementById(`${tabName}-input`).value = '';
+            document.getElementById(`${tabName}-btn`).disabled = false;
+            document.getElementById(`${tabName}-wrp`).classList.add('hidden');
+            document.getElementById(`${tabName}-random`).classList.remove('d-none');
+        }
     </script>
 </body>
 </html>
